@@ -1,6 +1,6 @@
 import streamlit.components.v1 as com
 import streamlit as st
-from streamlit_extras.metric_cards import style_metric_cards
+import streamlit_extras
 import plotly.express as px
 import numpy as np
 import pandas as pd
