@@ -1,5 +1,5 @@
-import streamlit as st
 import streamlit.components.v1 as com
+import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
 import plotly.express as px
 import numpy as np
@@ -18,7 +18,8 @@ st.set_page_config(
 # dashboard styling css
 
 # page background color 
-
+with open('dashboard_style/dash.css','r') as dash_css:
+    dash_css_style = dash_css.read() 
 
 st.markdown("""
          <style>
@@ -165,13 +166,14 @@ st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootst
 
 st.markdown("""
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #e9bd01;position:fixed; top:46px;height:48px">
-  <a class="navbar-brand" href="" target="_blank" style= "color: black; font-weight: bold">Bike Sales Analysis Dasboard</a>
+  <a class="navbar-brand" href="https://youtube.com/dataprofessor" target="_blank" style= "color: black; font-weight: bold">Bike Sales Analysis Dasboard</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
+        <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="https://youtube.com/dataprofessor" target="_blank"></a>
@@ -293,130 +295,77 @@ with total5:
 style_metric_cards(background_color="#FFFFFF",border_left_color="#686664",border_color="#000000",box_shadow="#F71938")
 
 
-charts_row1_col1, charts_row1_col2 = st.columns(2)
+# graphs
 
-with charts_row1_col1:
-    # Display total profit by year
-    yearly_profit = bikes_selection.groupby('Year')['Profit'].sum().reset_index()
-    fig_profit = px.line(yearly_profit, x='Year', y='Profit',
-                         markers=True,
-                         title='Yearly Total Profit',
-                         labels={'Year': 'Year', 'Profit': 'Profit'},
-                         line_shape='linear',
-                         line_dash_sequence=['solid'],
-                         template='plotly_dark',
-                         color_discrete_sequence=['#e9bd01']
-                         )
-    # Customize layout
-    fig_profit.update_layout(
-        template='plotly_dark',
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=False),
-        plot_bgcolor='black',
-        title='Profit by Year',
-        title_font_size=20,
-        title_font_color='white',
-        width=500,
-        height=400,
-        margin=dict(l=50, r=50, t=50, b=50),
-        paper_bgcolor='black',
-    )
-    st.plotly_chart(fig_profit)
+# display total profit by year
 
-with charts_row1_col2:
-    # Display product category distribution
-    category_distribution = bikes_selection.groupby('Product_Category')['Order_Quantity'].sum().reset_index()
-    fig_category_distribution = px.pie(category_distribution, names='Product_Category', values='Order_Quantity',
-                                      title='Product Category Distribution')
-    # Customize layout
-    fig_category_distribution.update_layout(
-        template='plotly_dark',
-        title_font_size=20,
-        title_font_color='white',
-        width=600,
-        height=400,
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        legend=dict(
-            title=dict(text='Product Category', font=dict(color='white')),
-            traceorder='normal',
-            title_font=dict(color='#e9bd01'),
-            bgcolor='#f3ecec',
-        ),
-    )
-    fig_category_distribution.update_traces(
-        marker=dict(colors=['#e9bd01', 'grey', 'white']),
-        hovertemplate='<b>%{label}</b><br>%{percent}',
-    )
-    st.plotly_chart(fig_category_distribution)
+yearly_profit = bikes_selection.groupby('Year')['Profit'].sum().reset_index()
 
-# Display total revenue by year and monthly sales in a row
-charts_row2_col1, charts_row2_col2 = st.columns(2)
+# line_color_options = ['#e9bd01', 'red', 'blue', 'green']
+# selected_line_color = st.selectbox('Select Line Color', line_color_options, index=0)
 
-with charts_row2_col1:
-    # Display total revenue by year
-    yearly_revenue = bikes_selection.groupby('Year')['Revenue'].sum().reset_index()
-    fig_revenue = px.line(yearly_revenue, x='Year', y='Revenue',
-                          markers=True,
-                          title='Yearly Total Revenue',
-                          labels={'Year': 'Year', 'Revenue': 'Revenue'},
-                          line_shape='linear',
-                          line_dash_sequence=['solid'],
-                          template='plotly_dark',
-                          color_discrete_sequence=['#e9bd01']
-                          )
-    # Customize layout
-    fig_revenue.update_layout(
-        template='plotly_dark',
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=False),
-        plot_bgcolor='black',
-        title='Revenue by Year',
-        title_font_size=20,
-        title_font_color='white',
-        width=500,
-        height=400,
-        margin=dict(l=50, r=50, t=50, b=50),
-        paper_bgcolor='black',
-    )
-    st.plotly_chart(fig_revenue)
+fig = px.line(yearly_profit, x='Year', y='Profit',
+              markers=True,
+              title='Yearly Total Profit',
+              labels={'Year': 'Year', 'Profit': 'Profit'},
+              line_shape='linear',
+              line_dash_sequence=['solid'],
+              template='plotly_dark',  
+              color_discrete_sequence=['#e9bd01']
+              )
 
-with charts_row2_col2:
-    # Display monthly sales
-    monthly_sales = bikes_selection.groupby(['Month'], as_index=False)['Order_Quantity'].sum()
-    fig_monthly_sales = px.bar(
-        monthly_sales,
-        x='Month',
-        y='Order_Quantity',
-        color='Order_Quantity',
-        labels={'Order_Quantity': 'Sales Quantity'},
-        template='plotly_dark',
-        title='Monthly Sales',
-    )
-    # Customize layout
-    fig_monthly_sales.update_layout(
-        xaxis_title='Month',
-        yaxis_title='Sales Quantity',
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        title_font=dict(size=20, color='white'),
-        font=dict(color='white'),
-        coloraxis_showscale=False,
-    )
-    st.plotly_chart(fig_monthly_sales)
-
-
-# Display sales by country and distribution of gender by sales count in a row
-charts_row3_col1, charts_row3_col2 = st.columns(2)
-
-with charts_row3_col1:
+fig.update_layout(
+    template='plotly_dark',  
+    xaxis=dict(showgrid=False), 
+    yaxis=dict(showgrid=False),  
+    plot_bgcolor='black', 
+    title='Profit by Year',
+    title_font_size=20,
+    title_font_color='white',
+    width=500,  
+    height=400,  
+    margin=dict(l=50, r=50, t=50, b=50),
+    paper_bgcolor='black',
     
-    # Display sales by country
-    total_sales_by_country = bikes_selection.groupby('Country')['Order_Quantity'].sum().reset_index()
-    # sales by country 
+)
 
-    total_sales_by_country = bikes_selection.groupby('Country')['Order_Quantity'].sum().reset_index()
-    geojson_data = {
+
+st.plotly_chart(fig)
+
+# Product category distribution 
+
+category_distribution = bikes_selection.groupby('Product_Category')['Order_Quantity'].sum().reset_index()
+
+fig = px.pie(category_distribution, names='Product_Category', values='Order_Quantity', title='Product Category Distribution')
+
+fig.update_layout(
+    template='plotly_dark',  
+    title_font_size=20,  
+    title_font_color='white',  
+    width=600,  
+    height=400, 
+    paper_bgcolor='black',
+    plot_bgcolor='black',
+    legend=dict(
+        title=dict(text='Product Category', font=dict(color='white')),
+        traceorder='normal',  
+        title_font=dict(color='#e9bd01'),  
+        bgcolor='#f3ecec',  
+        
+    ),
+ 
+)
+fig.update_traces(
+    marker=dict(colors=['#e9bd01', 'grey', 'white']),
+    hovertemplate='<b>%{label}</b><br>%{percent}',
+)
+
+st.plotly_chart(fig)
+
+# sales by country 
+
+total_sales_by_country = bikes_selection.groupby('Country')['Order_Quantity'].sum().reset_index()
+geojson_data = {
     "type": "FeatureCollection",
     "features": [
         {"type": "Feature", "properties": {"name": "USA"}, "geometry": {"type": "Polygon", "coordinates": [[[-130, 25], [-65, 25], [-65, 50], [-130, 50], [-130, 25]]]}},
@@ -428,7 +377,7 @@ with charts_row3_col1:
     ]
 }
 
-    fig = px.scatter_geo(
+fig = px.scatter_geo(
     total_sales_by_country,
     geojson=geojson_data,
     featureidkey="properties.name",
@@ -446,7 +395,7 @@ with charts_row3_col1:
 )
 
 # Customize layout
-    fig.update_layout(
+fig.update_layout(
     geo=dict(bgcolor='black'),  
     paper_bgcolor='black',  
     title_font=dict(size=20, color='white'), 
@@ -456,212 +405,268 @@ with charts_row3_col1:
 
 )
 
-    st.plotly_chart(fig)
-   
-with charts_row3_col2:
-    # Display distribution of gender by sales count
-    gender_sales_count = bikes_selection.groupby('Customer_Gender')['Order_Quantity'].sum().reset_index()
-    fig_gender_sales_count = px.pie(
-        gender_sales_count,
-        names='Customer_Gender',
-        values='Order_Quantity',
-        template='plotly_dark',
-        title='Distribution of Gender by Sales Count',
-        hover_data=['Order_Quantity'],
-    )
-    fig_gender_sales_count.update_traces(
-        hovertemplate='%{label}: <b>%{value}</b>',
-    )
-    # Customize layout
-    fig_gender_sales_count.update_layout(
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        title_font=dict(size=20, color='white'),
-        font=dict(color='white'),
-        legend=dict(
-            title=dict(text='Customer Gender', font=dict(color='white')),
-            traceorder='normal',
-            title_font=dict(color='#e9bd01'),
-            bgcolor='#f3ecec',
-        ),
-    )
-    fig_gender_sales_count.update_traces(
-        marker=dict(colors=['#e9bd01', 'grey']),
-        hovertemplate='<b>%{label}</b><br>%{percent}',
-    )
-    st.plotly_chart(fig_gender_sales_count)
+st.plotly_chart(fig)
 
-# Continue with the rest of your code...
-# Continue with the rest of your code...
 
-# Display age category by sales and top ten product name by sales in a row
-charts_row4_col1, charts_row4_col2 = st.columns(2)
 
-with charts_row4_col1:
-    # Display age category by sales
-    age_category_sales = bikes_selection.groupby('Age_Category')['Order_Quantity'].sum().reset_index()
-    age_category_sales = age_category_sales.sort_values(by='Order_Quantity', ascending=False)
-    fig_age_category_sales = px.bar(
-        age_category_sales,
-        x='Age_Category',
-        y='Order_Quantity',
-        template='plotly_dark',
-        title='Age Category Sales',
-        labels={'Order_Quantity': 'Total Sales'},
-        color_discrete_sequence=['#e9bd01'],
-    )
-    fig_age_category_sales.update_layout(
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        title_font=dict(size=20, color='white'),
-        xaxis_title='Age Category',
-        yaxis_title='Total Sales',
-        font=dict(color='white'),
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=False),
-    )
-    fig_age_category_sales.update_traces(marker=dict(line=dict(width=20)))
-    st.plotly_chart(fig_age_category_sales)
+gender_sales_count = bikes_selection.groupby('Customer_Gender')['Order_Quantity'].sum().reset_index()
 
-with charts_row4_col2:
-    # Display top ten product name by sales
-    top_products = bikes_selection.groupby('Product')['Order_Quantity'].sum().reset_index()
-    top_products = top_products.sort_values(by='Order_Quantity', ascending=True).head(10)
-    fig_top_products_horizontal = px.bar(
-        top_products,
-        x='Order_Quantity',
-        y='Product',
-        title='Top Ten Products by Sales',
-        labels={'Order_Quantity': 'Total Sales'},
-        color='Order_Quantity',
-        color_continuous_scale='YlOrBr',
-        orientation='h',
-        width=600,
-        height=500,
-    )
-    fig_top_products_horizontal.update_layout(
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        title_font=dict(size=20, color='white'),
-        font=dict(color='white'),
-        coloraxis_showscale=False,
-    )
-    st.plotly_chart(fig_top_products_horizontal)
+fig = px.pie(
+    gender_sales_count,
+    names='Customer_Gender',  
+    values='Order_Quantity',   
+    template='plotly_dark',  
+    title='Distribution of Gender by Sales Count',
+    hover_data=['Order_Quantity'],
 
-# Continue with the rest of your code...
+)
 
-# Display top ten subcategories by sales and scatter plot for unit price vs. unit cost in a row
-charts_row5_col1, charts_row5_col2 = st.columns(2)
+fig.update_traces(
+    hovertemplate='%{label}: <b>%{value}</b>',
+)
 
-with charts_row5_col1:
-    # Display top ten subcategories by sales
-    top_subcategories = bikes_selection.groupby('Sub_Category')['Order_Quantity'].sum().reset_index()
-    top_subcategories = top_subcategories.sort_values(by='Order_Quantity', ascending=True)
-    fig_top_subcategories_horizontal = px.bar(
-        top_subcategories,
-        x='Order_Quantity',
-        y='Sub_Category',
-        title='Top Ten Subcategories by Sales',
-        labels={'Order_Quantity': 'Total Sales'},
-        color='Order_Quantity',
-        color_continuous_scale='YlOrBr',
-        orientation='h',
-        width=600,
-        height=500,
-    )
-    fig_top_subcategories_horizontal.update_layout(
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        title_font=dict(size=20, color='white'),
-        font=dict(color='white'),
-        coloraxis_showscale=False,
-    )
-    st.plotly_chart(fig_top_subcategories_horizontal)
 
-with charts_row5_col2:
-    # Display scatter plot for unit price vs. unit cost
-    scatter_fig = px.scatter(
-        bikes_selection,
-        x='Unit_Price',
-        y='Unit_Cost',
-        color='Cost',
-        color_continuous_scale=['yellow', 'grey'],
-        template='plotly_dark',
-        title='Unit Price vs. Unit Cost',
-        labels={'Cost': 'Cost'},
-        width=400,
-    )
-    scatter_fig.update_layout(
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        title_font=dict(size=20, color='white'),
-        font=dict(color='white'),
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=False),
-        coloraxis_colorbar=dict(outlinewidth=0, bordercolor='white'),
-        coloraxis_showscale=False,
-    )
-    st.plotly_chart(scatter_fig)
 
-# Continue with the rest of your code...
+# Customize layout
+fig.update_layout(
+    paper_bgcolor='black',  
+    plot_bgcolor='black',
+    title_font=dict(size=20, color='white'),  
+    font=dict(color='white'), 
+    legend=dict(
+        title=dict(text='Customer Gender', font=dict(color='white')),
+        traceorder='normal',  
+        title_font=dict(color='#e9bd01'),  
+        bgcolor='#f3ecec',  
+        
+    ), 
+)
+fig.update_traces(
+    marker=dict(colors=['#e9bd01', 'grey']),
+    hovertemplate='<b>%{label}</b><br>%{percent}',
+)
 
-# Display profit distribution by category and yearly revenue in a row
-charts_row6_col1, charts_row6_col2 = st.columns(2)
 
-with charts_row6_col1:
-    # Display profit distribution by category
-    profit_by_category = bikes_selection.groupby('Product_Category')['Profit'].sum().reset_index()
-    custom_colors = ['#e9bd01', 'grey', 'white']
-    donut_fig = px.pie(
-        profit_by_category,
-        names='Product_Category',
-        values='Profit',
-        hole=0.4,
-        color_discrete_sequence=custom_colors,
-        template='plotly_dark',
-        title='Profit Distribution by Category',
-    )
-    donut_fig.update_layout(
-        paper_bgcolor='black',
-        plot_bgcolor='black',
-        title_font=dict(size=20, color='white'),
-        font=dict(color='white'),
-        legend=dict(
-            bgcolor='#f3ecec',
-            bordercolor='black',
-            borderwidth=1,
-        ),
-    )
-    st.plotly_chart(donut_fig)
+st.plotly_chart(fig)
 
-with charts_row6_col2:
-    # Display yearly revenue
-    yearly_revenue = bikes_selection.groupby('Year')['Revenue'].sum().reset_index()
-    fig_yearly_revenue = px.line(
-        yearly_revenue,
-        x='Year',
-        y='Revenue',
-        markers=True,
-        title='Yearly Total Revenue',
-        labels={'Year': 'Year', 'Revenue': 'Revenue'},
-        line_shape='linear',
-        line_dash_sequence=['solid'],
-        template='plotly_dark',
-        color_discrete_sequence=['#e9bd01'],
-    )
-    fig_yearly_revenue.update_layout(
-        template='plotly_dark',
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=False),
-        plot_bgcolor='black',
-        title='Revenue by Year',
-        title_font_size=20,
-        title_font_color='white',
-        width=500,
-        height=400,
-        margin=dict(l=50, r=50, t=50, b=50),
-        paper_bgcolor='black',
-    )
-    st.plotly_chart(fig_yearly_revenue)
+# Age category by sales
 
-# Continue with the rest of your code...
+age_category_sales = bikes_selection.groupby('Age_Category')['Order_Quantity'].sum().reset_index()
+age_category_sales = age_category_sales.sort_values(by='Order_Quantity', ascending=False)
+
+fig = px.bar(
+    age_category_sales,
+    x='Age_Category',
+    y='Order_Quantity',
+    template='plotly_dark',  
+    title='Age Category Sales',
+    labels={'Order_Quantity': 'Total Sales'},  
+    color_discrete_sequence=['#e9bd01'],  
+)
+
+fig.update_layout(
+    paper_bgcolor='black',  
+    plot_bgcolor='black',  
+    title_font=dict(size=20, color='white'),  
+    xaxis_title='Age Category',  
+    yaxis_title='Total Sales',  
+    font=dict(color='white'),  
+    xaxis=dict(showgrid=False),  
+    yaxis=dict(showgrid=False),  
+)
+
+fig.update_traces(marker=dict(line=dict(width=20)))  
+
+
+st.plotly_chart(fig)
+
+
+# Top ten product name by sales 
+top_products = bikes_selection.groupby('Product')['Order_Quantity'].sum().reset_index()
+top_products = top_products.sort_values(by='Order_Quantity', ascending=True).head(10)
+
+fig_top_products_horizontal = px.bar(
+    top_products,
+    x='Order_Quantity',
+    y='Product',
+    title='Top Ten Products by Sales',
+    labels={'Order_Quantity': 'Total Sales'},
+    color='Order_Quantity',
+    color_continuous_scale='YlOrBr',
+    orientation='h',
+    width= 600,
+    height=500
+)
+
+# Customize layout
+fig_top_products_horizontal.update_layout(
+    paper_bgcolor='black',
+    plot_bgcolor='black',
+    title_font=dict(size=20, color='white'),
+    font=dict(color='white'),  
+    coloraxis_showscale=False,
+)
+
+st.plotly_chart(fig_top_products_horizontal)
+
+# Top ten sub category by sales 
+top_subcategories = bikes_selection.groupby('Sub_Category')['Order_Quantity'].sum().reset_index()
+
+top_subcategories = top_subcategories.sort_values(by='Order_Quantity', ascending=True)
+
+fig_top_subcategories_horizontal = px.bar(
+    top_subcategories,
+    x='Order_Quantity',
+    y='Sub_Category',
+    title='Top Ten Subcategories by Sales',
+    labels={'Order_Quantity': 'Total Sales'},
+    color='Order_Quantity',
+    color_continuous_scale='YlOrBr',
+    orientation='h',
+     width= 600,
+     height=500
+
+)
+
+# Customize layout
+fig_top_subcategories_horizontal.update_layout(
+    paper_bgcolor='black',
+    plot_bgcolor='black',
+    title_font=dict(size=20, color='white'),
+    font=dict(color='white'),  
+    coloraxis_showscale=False,
+)
+
+st.plotly_chart(fig_top_subcategories_horizontal)
+
+
+scatter_fig = px.scatter(
+    bikes_selection,
+    x='Unit_Price',
+    y='Unit_Cost',
+    color='Cost',
+    color_continuous_scale=['yellow', 'grey'],  # Yellow to Grey color scale
+    template='plotly_dark',  # Black background
+    title='Unit Price vs.Unit Cost',
+    labels={'Cost': 'Cost'},
+    width=400
+)
+
+# Customize layout
+scatter_fig.update_layout(
+    paper_bgcolor='black',
+    plot_bgcolor='black',
+    title_font=dict(size=20, color='white'),
+    font=dict(color='white'),
+    xaxis=dict(showgrid=False),  
+    yaxis=dict(showgrid=False),  
+    coloraxis_colorbar=dict(outlinewidth=0, bordercolor='white'),  
+    coloraxis_showscale=False,
+
+)
+
+
+st.plotly_chart(scatter_fig)
+
+
+
+# profit by category
+
+profit_by_category = bikes_selection.groupby('Product_Category')['Profit'].sum().reset_index()
+
+# Define custom colors for each category
+custom_colors = ['#e9bd01', 'grey', 'white']
+
+# Donut chart for Profit by Category
+donut_fig = px.pie(
+    profit_by_category,
+    names='Product_Category',
+    values='Profit',
+    hole=0.4,  # Size of the hole (0.4 means 40% of the center is empty, creating a donut)
+    color_discrete_sequence=custom_colors,  # Custom colors for categories
+    template='plotly_dark',  # Black background
+    title='Profit Distribution by Category',
+)
+
+# Customize layout
+donut_fig.update_layout(
+    paper_bgcolor='black',
+    plot_bgcolor='black',
+    title_font=dict(size=20, color='white'),
+    font=dict(color='white'),
+    legend=dict(
+        bgcolor='#f3ecec',  # Legend background color
+        bordercolor='black',  # Legend border color
+        borderwidth=1,  # Legend border width
+    ),
+)
+
+# Display the donut chart using Streamlit
+st.plotly_chart(donut_fig)
+
+
+
+# yearly revenue 
+
+yearly_revenue = bikes_selection.groupby('Year')['Revenue'].sum().reset_index()
+
+# line_color_options = ['#e9bd01', 'red', 'blue', 'green']
+# selected_line_color = st.selectbox('Select Line Color', line_color_options, index=0)
+
+fig = px.line(yearly_revenue, x='Year', y='Revenue',
+              markers=True,
+              title='Yearly Total Revenue',
+              labels={'Year': 'Year', 'Revenue': 'Revenue'},
+              line_shape='linear',
+              line_dash_sequence=['solid'],
+              template='plotly_dark',  
+              color_discrete_sequence=['#e9bd01']
+              )
+
+fig.update_layout(
+    template='plotly_dark',  
+    xaxis=dict(showgrid=False), 
+    yaxis=dict(showgrid=False),  
+    plot_bgcolor='black', 
+    title='Revenue by Year',
+    title_font_size=20,
+    title_font_color='white',
+    width=500,  
+    height=400,  
+    margin=dict(l=50, r=50, t=50, b=50),
+    paper_bgcolor='black',
+    
+)
+
+
+st.plotly_chart(fig)
+
+
+
+# monthly sales 
+
+monthly_sales = bikes_selection.groupby(['Month'], as_index=False)['Order_Quantity'].sum()
+# Create a bar chart for Monthly Sales
+bar_fig = px.bar(
+    monthly_sales,
+    x='Month',
+    y='Order_Quantity',
+    color='Order_Quantity',
+    labels={'Order_Quantity': 'Sales Quantity'},
+    template='plotly_dark',
+    title='Monthly Sales',
+)
+
+# Customize layout
+bar_fig.update_layout(
+    xaxis_title='Month',
+    yaxis_title='Sales Quantity',
+    paper_bgcolor='black',
+    plot_bgcolor='black',
+    title_font=dict(size=20, color='white'),
+    font=dict(color='white'),
+    coloraxis_showscale=False,
+)
+
+# Display the bar chart using Streamlit
+st.plotly_chart(bar_fig)
