@@ -8,8 +8,8 @@ import pandas as pd
 
 
 
-# page setting
-
+# page settings
+ 
 st.set_page_config(
     page_title="Bike Sales Dashboard",
     page_icon="images/bicycle.png",
