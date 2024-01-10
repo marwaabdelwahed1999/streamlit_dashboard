@@ -268,49 +268,26 @@ total_cost = bikes_selection['Cost'].sum()
 total_profit = bikes_selection['Profit'].sum()
 total_revenue = bikes_selection['Revenue'].sum()
 total_orders_count = len(bikes_selection['Date'])
-
-
-def style_metric_cards(**styles):
-    # Your styling logic goes here
-    pass
-
-# Assuming these variables are defined
-total_sales = 100000
-total_cost = 75000
-total_revenue = 25000
-total_profit = 5000
-total_orders_count = 50
-
 total1, total2, total3, total4, total5 = st.columns(5, gap='small')
 
+# Define CSS styles
+card_style = "background-color: white; color: black; padding: 10px; border: 1px solid yellow; border-radius: 5px; box-shadow: 2px 2px 5px yellow;font-weight:bold"
+
+# Display metrics in each column with Markdown styling and inline CSS
 with total1:
-    st.info('Total Quantity', icon="💰")
-    st.metric(label=".", value=f" {total_sales:,.0f}")
+    st.markdown(f"<div style='{card_style}'>Total Quantity<br> {total_sales:,.0f}</div>", unsafe_allow_html=True)
 
 with total2:
-    st.info('Total Cost', icon="💰")
-    st.metric(label=".", value=f"$ {total_cost:,.0f}")
+    st.markdown(f"<div style='{card_style}'>Total Cost<br> $ {total_cost:,.0f}</div>", unsafe_allow_html=True)
 
 with total3:
-    st.info('Total Revenue', icon="💰")
-    st.metric(label=".", value=f"$ {total_revenue:,.0f}")
+    st.markdown(f"<div style='{card_style}'>Total Revenue<br> $ {total_revenue:,.0f}</div>", unsafe_allow_html=True)
 
 with total4:
-    st.info('Total Profit', icon="💰")
-    st.metric(label=".", value=f"$ {total_profit:,.0f}")
+    st.markdown(f"<div style='{card_style}'>Total Profit<br> $ {total_profit:,.0f}</div>", unsafe_allow_html=True)
 
 with total5:
-    st.info('Total Orders', icon="💰")
-    st.metric(label=".", value=f"{total_orders_count:,.0f}")
-
-# Apply styling to the metric cards
-style_metric_cards(
-    background_color="#FFFFFF",
-    border_left_color="#686664",
-    border_color="#000000",
-    box_shadow="#F71938"
-)
-
+    st.markdown(f"<div style='{card_style}'>Total Orders<br> {total_orders_count:,.0f}</div>", unsafe_allow_html=True)
 
 # graphs
 
