@@ -1,5 +1,5 @@
 import streamlit as st
-import streamlit.components.v1 as com
+import streamlit.components.v1 as comp
 import plotly.express as px
 import numpy as np
 import pandas as pd
