@@ -18,8 +18,7 @@ st.set_page_config(
 # dashboard styling css
 
 # page background color 
-with open('dashboard_style/dash.css','r') as dash_css:
-    dash_css_style = dash_css.read() 
+
 
 st.markdown("""
          <style>
