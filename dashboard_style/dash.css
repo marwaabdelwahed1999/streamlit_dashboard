@@ -1,0 +1,29 @@
+.st-emotion-cache-uf99v8 {
+    background-color: black;
+    width: 100%;
+    padding: 6rem 1rem 10rem;
+    min-width: auto;
+    max-width: initial;
+                          }  
+                          
+   .st-emotion-cache-vk3wp9 {
+           position: relative;
+           top: 92px;
+           user-select: auto;
+           width: 244px;
+           height: 742px;
+           box-sizing: border-box;
+           flex-shrink: 0;
+           background-color:#e9bd01 ;
+   }               
+   
+   img {
+      border-radius: 50%;
+      width: 169px; 
+      height: 163px; 
+      object-fit: cover; 
+      position:relative;
+      top: -54px;
+      left: 10px;
+
+        }      
