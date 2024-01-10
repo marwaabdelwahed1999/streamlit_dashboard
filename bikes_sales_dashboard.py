@@ -18,8 +18,7 @@ st.set_page_config(
 # dashboard styling css
 
 # page background color 
-with open('dashboard_style/dash.css','r') as dash_css:
-    dash_css_style = dash_css.read() 
+
 
 st.markdown("""
          <style>
@@ -166,14 +165,13 @@ st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootst
 
 st.markdown("""
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #e9bd01;position:fixed; top:46px;height:48px">
-  <a class="navbar-brand" href="https://youtube.com/dataprofessor" target="_blank" style= "color: black; font-weight: bold">Bike Sales Analysis Dasboard</a>
+  <a class="navbar-brand" href="" target="_blank" style= "color: black; font-weight: bold">Bike Sales Analysis Dasboard</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="https://youtube.com/dataprofessor" target="_blank"></a>
@@ -417,8 +415,8 @@ with charts_row3_col1:
     total_sales_by_country = bikes_selection.groupby('Country')['Order_Quantity'].sum().reset_index()
     # sales by country 
 
-total_sales_by_country = bikes_selection.groupby('Country')['Order_Quantity'].sum().reset_index()
-geojson_data = {
+    total_sales_by_country = bikes_selection.groupby('Country')['Order_Quantity'].sum().reset_index()
+    geojson_data = {
     "type": "FeatureCollection",
     "features": [
         {"type": "Feature", "properties": {"name": "USA"}, "geometry": {"type": "Polygon", "coordinates": [[[-130, 25], [-65, 25], [-65, 50], [-130, 50], [-130, 25]]]}},
@@ -430,7 +428,7 @@ geojson_data = {
     ]
 }
 
-fig = px.scatter_geo(
+    fig = px.scatter_geo(
     total_sales_by_country,
     geojson=geojson_data,
     featureidkey="properties.name",
@@ -448,7 +446,7 @@ fig = px.scatter_geo(
 )
 
 # Customize layout
-fig.update_layout(
+    fig.update_layout(
     geo=dict(bgcolor='black'),  
     paper_bgcolor='black',  
     title_font=dict(size=20, color='white'), 
@@ -458,7 +456,7 @@ fig.update_layout(
 
 )
 
-st.plotly_chart(fig)
+    st.plotly_chart(fig)
    
 with charts_row3_col2:
     # Display distribution of gender by sales count
