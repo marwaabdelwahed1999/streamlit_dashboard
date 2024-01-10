@@ -1,6 +1,5 @@
 import streamlit.components.v1 as com
 import streamlit as st
-from streamlit_extras.metric_cards import style_metric_cards
 import plotly.express as px
 import numpy as np
 import pandas as pd
@@ -271,29 +270,46 @@ total_revenue = bikes_selection['Revenue'].sum()
 total_orders_count = len(bikes_selection['Date'])
 
 
-total1,total2,total3,total4,total5=st.columns(5,gap='small')
+def style_metric_cards(**styles):
+    # Your styling logic goes here
+    pass
+
+# Assuming these variables are defined
+total_sales = 100000
+total_cost = 75000
+total_revenue = 25000
+total_profit = 5000
+total_orders_count = 50
+
+total1, total2, total3, total4, total5 = st.columns(5, gap='small')
+
 with total1:
-        st.info('Total Quantity',icon="💰")
-        st.metric(label=".",value=f" {total_sales:,.0f}")
+    st.info('Total Quantity', icon="💰")
+    st.metric(label=".", value=f" {total_sales:,.0f}")
 
 with total2:
-        st.info('Total Cost',icon="💰")
-        st.metric(label=".",value=f"$ {total_cost:,.0f}")
+    st.info('Total Cost', icon="💰")
+    st.metric(label=".", value=f"$ {total_cost:,.0f}")
 
 with total3:
-        st.info('Total Revenue',icon="💰")
-        st.metric(label=".",value=f"$ {total_revenue:,.0f}")
+    st.info('Total Revenue', icon="💰")
+    st.metric(label=".", value=f"$ {total_revenue:,.0f}")
 
 with total4:
-        st.info('Total Profit',icon="💰")
-        st.metric(label=".",value=f"$ {total_profit:,.0f}")
+    st.info('Total Profit', icon="💰")
+    st.metric(label=".", value=f"$ {total_profit:,.0f}")
 
 with total5:
-        st.info('Total Orders',icon="💰")
-        st.metric(label=".",value=f"{total_orders_count:,.0f}")
+    st.info('Total Orders', icon="💰")
+    st.metric(label=".", value=f"{total_orders_count:,.0f}")
 
-    
-style_metric_cards(background_color="#FFFFFF",border_left_color="#686664",border_color="#000000",box_shadow="#F71938")
+# Apply styling to the metric cards
+style_metric_cards(
+    background_color="#FFFFFF",
+    border_left_color="#686664",
+    border_color="#000000",
+    box_shadow="#F71938"
+)
 
 
 # graphs
