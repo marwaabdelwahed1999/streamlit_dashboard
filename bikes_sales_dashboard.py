@@ -271,7 +271,7 @@ total_orders_count = len(bikes_selection['Date'])
 total1, total2, total3, total4, total5 = st.columns(5, gap='small')
 
 # Define CSS styles
-card_style = "background-color: white; color: black; padding: 10px; border: 1px solid yellow; border-radius: 5px; box-shadow: 2px 2px 5px yellow;font-weight:bold"
+card_style = "background-color: white; color: black; padding: 10px; border: 1px solid yellow; border-radius: 5px; box-shadow: 2px 2px 5px yellow;font-weight:bold;text-align:center"
 
 # Display metrics in each column with Markdown styling and inline CSS
 with total1:
